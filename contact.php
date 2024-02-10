@@ -13,17 +13,17 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 
-    <title>МАГАЗИН</title>
+    <title>Профиль</title>
 </head>
 
 <body>
 
-    <!-- navbar -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-white py-3 fixed-top">
+     <!-- navbar -->
+     <nav class="navbar navbar-expand-lg navbar-light bg-white py-3 fixed-top">
 
         <div class="container">
 
-            <a class="navbar-brand" href="index.html">
+            <a class="navbar-brand" href="index.php">
                 <!-- <img src="assets/images/logo.jpeg" alt=""> -->
                 МАГАЗОН
             </a>
@@ -39,26 +39,26 @@
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
 
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="index.html">Главная</a>
+                        <a class="nav-link active" aria-current="page" href="index.php">Главная</a>
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link" href="shop.html">Затариться</a>
+                        <a class="nav-link" href="shop.php">Затариться</a>
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link" href="news.html">Новости</a>
+                        <a class="nav-link" href="news.php">Новости</a>
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link" href="contact.html">Контакты</a>
+                        <a class="nav-link" href="contact.php">Контакты</a>
                     </li>
 
                     <li class="nav-item">
-                        <a href="cart.html">
+                        <a href="cart.php">
                             <i class="fas fa-shopping-bag"></i>
                         </a>
-                        <a href="account.html">
+                        <a href="account.php">
                             <i class="fas fa-user"></i>
                         </a>
                     </li>
@@ -68,39 +68,23 @@
         </div>
     </nav>
 
-
-    <!-- login -->
-    <section class="my-5 py-5">
-        <div class="container text-center mt-3 pt-5">
-            <h2 class="form-weight-bold">Заходи, не стесняйся</h2>
-            <hr class="mx-auto hr" />
-        </div>
-        <div class="mx-auto container">
-            <form action="" id="login-form">
-
-                <div class="form-group">
-                    <label>Почта</label>
-                    <input type="text" class="form-control" id="login-email" name="email" placeholder="email"
-                        required />
-                </div>
-
-                <div class="form-group">
-                    <label>Пароль</label>
-                    <input type="password" class="form-control" id="login-password" name="password" placeholder="пароль"
-                        required />
-                </div>
-
-                <div class="form-group">
-                    <input type="submit" class="btn" id="login-btn" value="Заходи, говорю" />
-                </div>
-
-                <div class="form-group">
-                    <a id="register-url" class="btn" href="/register">Первый раз, что-ли? Тогда камон регаться</a>
-                </div>
-
-            </form>
+    <!-- contact -->
+    <section id="contact" class="container my-5 py-5">
+        <div class="container text-center mt-5">
+            <h3>Мы на связи</h3>
+            <hr class="mx-auto">
+            <p class="w-50-mx-auto">
+                Телефон: <span>123 456 678</span>
+            </p>
+            <p class="w-50 mx-auto">
+                Почта: <span>magazon@ya.com</span>
+            </p>
+            <p class="w-50 mx-auto">
+                Наши специалисты не спят 24 часа в сутки, чтобы ответить на твои дурацие вопросы
+            </p>
         </div>
     </section>
+
 
 
     <footer class="mt-5 py-5">

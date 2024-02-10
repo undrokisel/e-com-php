@@ -18,12 +18,12 @@
 
 <body>
 
-     <!-- navbar -->
-     <nav class="navbar navbar-expand-lg navbar-light bg-white py-3 fixed-top">
+    <!-- navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white py-3 fixed-top">
 
         <div class="container">
 
-            <a class="navbar-brand" href="index.html">
+            <a class="navbar-brand" href="index.php">
                 <!-- <img src="assets/images/logo.jpeg" alt=""> -->
                 МАГАЗОН
             </a>
@@ -39,26 +39,26 @@
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
 
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="index.html">Главная</a>
+                        <a class="nav-link active" aria-current="page" href="index.php">Главная</a>
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link" href="shop.html">Затариться</a>
+                        <a class="nav-link" href="shop.php">Затариться</a>
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link" href="news.html">Новости</a>
+                        <a class="nav-link" href="news.php">Новости</a>
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link" href="contact.html">Контакты</a>
+                        <a class="nav-link" href="contact.php">Контакты</a>
                     </li>
 
                     <li class="nav-item">
-                        <a href="cart.html">
+                        <a href="cart.php">
                             <i class="fas fa-shopping-bag"></i>
                         </a>
-                        <a href="account.html">
+                        <a href="account.php">
                             <i class="fas fa-user"></i>
                         </a>
                     </li>
@@ -68,23 +68,45 @@
         </div>
     </nav>
 
-    <!-- contact -->
-    <section id="contact" class="container my-5 py-5">
-        <div class="container text-center mt-5">
-            <h3>Мы на связи</h3>
-            <hr class="mx-auto">
-            <p class="w-50-mx-auto">
-                Телефон: <span>123 456 678</span>
-            </p>
-            <p class="w-50 mx-auto">
-                Почта: <span>magazon@ya.com</span>
-            </p>
-            <p class="w-50 mx-auto">
-                Наши специалисты не спят 24 часа в сутки, чтобы ответить на твои дурацие вопросы
-            </p>
+    <!-- account -->
+    <section class="account my-5 py-5">
+        <div class="row container mx-auto">
+            <div class="text-center mt-3 pt-5 col-lg-5 col-md-12 col-sm-12">
+                <h3 class="font-weight-bold">Досье</h3>
+                <hr class="mx-auto">
+                <div class="account-info">
+                    <p>Имя: <span>Вася</span></p>
+                    <p>Почта: <span>Вася@фывфы</span></p>
+                    <p><a id="order-btn" href="">Корзинка</a></p>
+                    <p><a id="logout-btn" href="">Разлогинка</a></p>
+                </div>
+            </div>
+
+            <div class="col-lg-6 col-md-12 col-sm-12">
+                <form action="" id="account-form">
+                    <h3>Сменить пасс</h3>
+                    <hr class="mx-auto">
+
+                    <div class="form-group">
+                        <label>Пасс</label>
+                        <input type="password" class="form-control" required name="password" id="account-password"
+                            placeholder="Пасс">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Подтвердить пасс</label>
+                        <input type="password" class="form-control" required name="confirmPassword"
+                            id="account-password-confirm" placeholder="Пасс">
+                    </div>
+
+                    <div class="form-group">
+                        <input type="submit" class="btn btn-submit" value="Сохранить" id="change-pass-btn">
+                    </div>
+
+                </form>
+            </div>
         </div>
     </section>
-
 
 
     <footer class="mt-5 py-5">

@@ -18,12 +18,12 @@
 
 <body>
 
-    <!-- navbar -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-white py-3 fixed-top">
+     <!-- navbar -->
+     <nav class="navbar navbar-expand-lg navbar-light bg-white py-3 fixed-top">
 
         <div class="container">
 
-            <a class="navbar-brand" href="index.html">
+            <a class="navbar-brand" href="index.php">
                 <!-- <img src="assets/images/logo.jpeg" alt=""> -->
                 МАГАЗОН
             </a>
@@ -39,26 +39,26 @@
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
 
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="index.html">Главная</a>
+                        <a class="nav-link active" aria-current="page" href="index.php">Главная</a>
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link" href="shop.html">Затариться</a>
+                        <a class="nav-link" href="shop.php">Затариться</a>
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link" href="news.html">Новости</a>
+                        <a class="nav-link" href="news.php">Новости</a>
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link" href="contact.html">Контакты</a>
+                        <a class="nav-link" href="contact.php">Контакты</a>
                     </li>
 
                     <li class="nav-item">
-                        <a href="cart.html">
+                        <a href="cart.php">
                             <i class="fas fa-shopping-bag"></i>
                         </a>
-                        <a href="account.html">
+                        <a href="account.php">
                             <i class="fas fa-user"></i>
                         </a>
                     </li>
@@ -68,109 +68,50 @@
         </div>
     </nav>
 
-    <!-- cart -->
-    <section class="cart container my-5 py-5">
-        <div class="container mt-5">
-            <h2 class="font-weight-bold">Что-то мало набрали</h2>
-            <hr>
+
+    <!-- register -->
+    <section class="my-5 py-5">
+        <div class="container text-center mt-3 pt-5">
+            <h2 class="form-weight-bold">Привет, дорогой новорег!</h2>
+            <hr class="mx-auto" />
         </div>
-        <table class="mt-5pt-5">
-            <tr>
-                <th>Товар</th>
-                <th>Количество</th>
-                <th>Стоимость</th>
-            </tr>
+        <div class="mx-auto container">
+            <form action="" id="register-form">
 
-            <tr>
-                <td>
-                    <div class="product-info">
-                        <img src="assets/images/featured1.png" alt="" class="src" />
-                        <div class="">
-                            <p>Белые тапки</p>
-                            <small><span>деревянных:</span> 200</small>
-                            <br>
-                            <a href="" class="remove-btn">Remove</a>
-                        </div>
-                    </div>
-                </td>
+                <div class="form-group">
+                    <label>Как звать? Какой позывной?</label>
+                    <input type="text" class="form-control" id="register-name" name="name" placeholder="Вася"
+                        required />
+                </div>
 
-                <td>
-                    <input type="number" value="1" />
-                    <a href="" class="edit-btn">Изменить</a>
-                </td>
-                <td>
-                    <span>деревянных: </span>
-                    <span class="product-price">200</span>
-                </td>
+                <div class="form-group">
+                    <label>Почта</label>
+                    <input type="text" class="form-control" id="register-email" name="email" placeholder="email"
+                        required />
+                </div>
 
-            </tr>
+                <div class="form-group">
+                    <label>Пасс</label>
+                    <input type="password" class="form-control" id="register-password" name="password"
+                        placeholder="пароль" required />
+                </div>
 
-            <tr>
-                <td>
-                    <div class="product-info">
-                        <img src="assets/images/featured1.png" alt="" class="src" />
-                        <div class="">
-                            <p>Белые тапки</p>
-                            <small><span>деревянных:</span> 200</small>
-                            <br>
-                            <a href="" class="remove-btn">Remove</a>
-                        </div>
-                    </div>
-                </td>
+                <div class="form-group">
+                    <label>Повтори пасс плиз</label>
+                    <input type="password" class="form-control" id="register-confirm-password" name="confirmPassword"
+                        placeholder="пароль" required />
+                </div>
 
-                <td>
-                    <input type="number" value="1" />
-                    <a href="" class="edit-btn">Изменить</a>
-                </td>
-                <td>
-                    <span>деревянных: </span>
-                    <span class="product-price">200</span>
-                </td>
+                <div class="form-group">
+                    <input type="submit" class="btn" id="register-btn" value="Зарегаться" />
+                </div>
 
-            </tr>
+                <div class="form-group">
+                    <a id="register-url" class="btn" href="/login">Уже есть акк? Тогда заходи уже, не стесняйся</a>
+                </div>
 
-            <tr>
-                <td>
-                    <div class="product-info">
-                        <img src="assets/images/featured1.png" alt="" class="src" />
-                        <div class="">
-                            <p>Белые тапки</p>
-                            <small><span>деревянных:</span> 200</small>
-                            <br>
-                            <a href="" class="remove-btn">Remove</a>
-                        </div>
-                    </div>
-                </td>
-
-                <td>
-                    <input type="number" value="1" />
-                    <a href="" class="edit-btn">Изменить</a>
-                </td>
-                <td>
-                    <span>деревянных: </span>
-                    <span class="product-price">200</span>
-                </td>
-
-            </tr>
-        </table>
-
-        <div class="cart__total">
-            <table>
-                <tr>
-                    <td>Стоимость</td>
-                    <td>200 деревянных</td>
-                </tr>
-                <tr>
-                    <td>Всего</td>
-                    <td>200 деревянных</td>
-                </tr>
-            </table>
+            </form>
         </div>
-
-        <div class="checkout-container">
-            <button class="btn checkout-btn">Проверить</button>
-        </div>
-
     </section>
 
 

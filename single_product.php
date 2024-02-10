@@ -1,3 +1,18 @@
+<?php
+
+include('server/connection.php');
+
+if (isset($_GET['product_id'])) {
+    $product_id = $_GET['product_id'];
+    $stmt = $conn->prepare("SELECT * FROM products WHERE product_id = ?");
+    $stmt->bind_param("i", $product_id);
+    $stmt->execute();
+    $product = $stmt->get_result(); //[]
+} else {
+    header('location:index.php');
+}
+?>
+
 <!doctype html>
 <html lang="ru">
 
@@ -18,12 +33,12 @@
 
 <body>
 
-      <!-- navbar -->
-      <nav class="navbar navbar-expand-lg navbar-light bg-white py-3 fixed-top">
+    <!-- navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white py-3 fixed-top">
 
         <div class="container">
 
-            <a class="navbar-brand" href="index.html">
+            <a class="navbar-brand" href="index.php">
                 <!-- <img src="assets/images/logo.jpeg" alt=""> -->
                 МАГАЗОН
             </a>
@@ -39,26 +54,26 @@
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
 
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="index.html">Главная</a>
+                        <a class="nav-link active" aria-current="page" href="index.php">Главная</a>
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link" href="shop.html">Затариться</a>
+                        <a class="nav-link" href="shop.php">Затариться</a>
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link" href="news.html">Новости</a>
+                        <a class="nav-link" href="news.php">Новости</a>
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link" href="contact.html">Контакты</a>
+                        <a class="nav-link" href="contact.php">Контакты</a>
                     </li>
 
                     <li class="nav-item">
-                        <a href="cart.html">
+                        <a href="cart.php">
                             <i class="fas fa-shopping-bag"></i>
                         </a>
-                        <a href="account.html">
+                        <a href="account.php">
                             <i class="fas fa-user"></i>
                         </a>
                     </li>
@@ -72,55 +87,60 @@
     <section class="container single-product my-5 pt-5">
         <div class="row mt-5">
 
-            <div class="col-lg-5 col-md-6 col-sm-12">
-                <img id="mainImg" src="assets/images/featured1.png" alt="" class="img-fluid w-100 pb-1" />
-                <div class="small-img-group">
-                    <div class="small-img-col">
-                        <img src="/assets/images/featured2.jpg" width:"100%" alt="" class="small-img">
-                    </div>
-                    <div class="small-img-col">
-                        <img src="/assets/images/featured3.jpeg" width:"100%" alt="" class="small-img">
-                    </div>
-                    <div class="small-img-col">
-                        <img src="/assets/images/featured4.jpg" width:"100%" alt="" class="small-img">
-                    </div>
-                    <div class="small-img-col">
-                        <img src="/assets/images/featured2.jpg" width:"100%" alt="" class="small-img">
+            <?php while ($row = $product->fetch_assoc()) { ?>
+                <div class="col-lg-5 col-md-6 col-sm-12">
+                    <img id="mainImg" src="assets/images/<?php echo $row['product_image'] ?>" alt=""
+                        class="img-fluid w-100 pb-1" />
+                    <div class="small-img-group">
+                        <div class="small-img-col">
+                            <img src="/assets/images/<?php echo $row['product_image'] ?>" width:"100%" alt=""
+                                class="small-img">
+                        </div>
+                        <div class="small-img-col">
+                            <img src="/assets/images/<?php echo $row['product_image2'] ?>" width:"100%" alt=""
+                                class="small-img">
+                        </div>
+                        <div class="small-img-col">
+                            <img src="/assets/images/<?php echo $row['product_image3'] ?>" width:"100%" alt=""
+                                class="small-img">
+                        </div>
+                        <div class="small-img-col">
+                            <img src="/assets/images/<?php echo $row['product_image4'] ?>" width:"100%" alt=""
+                                class="small-img">
+                        </div>
                     </div>
                 </div>
-            </div>
-
-            <div class="col-lg-6 col-md-12 col-12">
-                <h6>Эпль вижн китайский</h6>
-                <h3 class="py-4">Мужицское</h3>
-                <h2>155 руб.</h2>
-                <input type="number" value="1" />
-                <button class="buy-btn">
-                    добавить в корзину
-                </button>
-                <h4 class="my-5">Подробнее</h4>
-                <span>Описание вкратце</span>
-                <span>Описание вкратце</span>
-                <span>Описание вкратце</span>
-                <span>Описание вкратце</span>
-                <span>Описание вкратце</span>
-                <span>Описание вкратце</span>
-                <span>Описание вкратце</span>
-                <span>Описание вкратце</span>
-                <span>Описание вкратце</span>
-                <span>Описание вкратце</span>
-                <span>Описание вкратце</span>
-                <span>Описание вкратце</span>
-                <span>Описание вкратце</span>
-                <span>Описание вкратце</span>
-                <span>Описание вкратце</span>
-                <span>Описание вкратце</span>
-                <span>Описание вкратце</span>
-                <span>Описание вкратце</span>
-                <span>Описание вкратце</span>
-            </div>
 
 
+
+                <div class="col-lg-6 col-md-12 col-12">
+                    <h6>Эпль вижн китайский</h6>
+                    <h3 class="py-4">
+                        <?php echo $row['product_name'] ?>
+                    </h3>
+                    <h2>
+                        <?php echo $row['product_price'] ?> руб.
+                    </h2>
+
+                    <form action="cart.php" method="POST">
+                        <input type="hidden" name="product_id" value="<?php echo $row['product_id'] ?>">
+                        <input type="hidden" name="product_image" value="<?php echo $row['product_image'] ?>">
+                        <input type="hidden" name="product_name" value="<?php echo $row['product_name'] ?>">
+                        <input type="hidden" name="product_price" value="<?php echo $row['product_price'] ?>">
+                        <input type="number" name="product_quantity" value="1" />
+                        <button class="buy-btn" type="submit" name="add_to_cart">
+                            Добавить в корзину
+                        </button>
+                    </form>
+
+                    <h4 class="my-5">Подробнее</h4>
+                    <span>
+                        <?php echo $row['product_description'] ?>
+                    </span>
+                </div>
+
+
+            <?php } ?>
         </div>
     </section>
 

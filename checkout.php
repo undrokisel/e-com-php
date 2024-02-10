@@ -13,17 +13,17 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 
-    <title>МАГАЗИН</title>
+    <title>Профиль</title>
 </head>
 
 <body>
 
-     <!-- navbar -->
-     <nav class="navbar navbar-expand-lg navbar-light bg-white py-3 fixed-top">
+    <!-- navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white py-3 fixed-top">
 
         <div class="container">
 
-            <a class="navbar-brand" href="index.html">
+            <a class="navbar-brand" href="index.php">
                 <!-- <img src="assets/images/logo.jpeg" alt=""> -->
                 МАГАЗОН
             </a>
@@ -39,26 +39,26 @@
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
 
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="index.html">Главная</a>
+                        <a class="nav-link active" aria-current="page" href="index.php">Главная</a>
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link" href="shop.html">Затариться</a>
+                        <a class="nav-link" href="shop.php">Затариться</a>
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link" href="news.html">Новости</a>
+                        <a class="nav-link" href="news.php">Новости</a>
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link" href="contact.html">Контакты</a>
+                        <a class="nav-link" href="contact.php">Контакты</a>
                     </li>
 
                     <li class="nav-item">
-                        <a href="cart.html">
+                        <a href="cart.php">
                             <i class="fas fa-shopping-bag"></i>
                         </a>
-                        <a href="account.html">
+                        <a href="account.php">
                             <i class="fas fa-user"></i>
                         </a>
                     </li>
@@ -68,51 +68,67 @@
         </div>
     </nav>
 
-
-    <!-- register -->
+    <!-- checkout -->
     <section class="my-5 py-5">
         <div class="container text-center mt-3 pt-5">
-            <h2 class="form-weight-bold">Привет, дорогой новорег!</h2>
+            <h2 class="form-weight-bold">Адрес доставки:</h2>
             <hr class="mx-auto" />
         </div>
         <div class="mx-auto container">
-            <form action="" id="register-form">
+            <form action="place_order.php" method="POST" id="checkout-form">
 
-                <div class="form-group">
+                <div class="form-group checkout-small-element">
                     <label>Как звать? Какой позывной?</label>
-                    <input type="text" class="form-control" id="register-name" name="name" placeholder="Вася"
+                    <input type="text" class="form-control" id="checkout-name" name="name" placeholder="Вася"
                         required />
                 </div>
 
-                <div class="form-group">
+                <div class="form-group checkout-small-element">
                     <label>Почта</label>
-                    <input type="text" class="form-control" id="register-email" name="email" placeholder="email"
+                    <input type="text" class="form-control" id="checkout-email" name="email" placeholder="email"
                         required />
                 </div>
 
-                <div class="form-group">
-                    <label>Пасс</label>
-                    <input type="password" class="form-control" id="register-password" name="password"
-                        placeholder="пароль" required />
+                <div class="form-group checkout-small-element">
+                    <label>Телефон</label>
+                    <input type="tel" class="form-control" id="checkout-phone" name="phone" placeholder="цифры"
+                        required />
                 </div>
 
-                <div class="form-group">
-                    <label>Повтори пасс плиз</label>
-                    <input type="password" class="form-control" id="register-confirm-password" name="confirmPassword"
-                        placeholder="пароль" required />
+                <div class="form-group checkout-small-element">
+                    <label>Город</label>
+                    <input type="text" class="form-control" id="checkout-city" name="city" placeholder="Москве"
+                        required />
                 </div>
 
-                <div class="form-group">
-                    <input type="submit" class="btn" id="register-btn" value="Зарегаться" />
+                <div class="form-group checkout-small-element">
+                    <label>Улица</label>
+                    <input type="text" class="form-control" id="checkout-street" name="street" placeholder="Ленина"
+                        required />
                 </div>
 
-                <div class="form-group">
-                    <a id="register-url" class="btn" href="/login">Уже есть акк? Тогда заходи уже, не стесняйся</a>
+                <div class="form-group checkout-small-element">
+                    <label>Дом</label>
+                    <input type="text" class="form-control" id="checkout-house" name="house" placeholder="1" required />
                 </div>
+
+                <div class="form-group checkout-small-element">
+                    <label>Квартира</label>
+                    <input type="number" min="1" class="form-control" id="checkout-flat" name="flat" placeholder="1"
+                        required />
+                </div>
+
+
+
+                <div class="form-group checkout-btn-container">
+                    <input type="submit" name="place_order" class="btn" id="checkout-btn" value="Сохранить" />
+                </div>
+
 
             </form>
         </div>
     </section>
+
 
 
     <footer class="mt-5 py-5">

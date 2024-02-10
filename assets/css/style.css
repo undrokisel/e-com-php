@@ -346,16 +346,20 @@ input[type="number"]:focus {
 
 .cart .remove-btn {
     color: coral;
-    ;
     text-decoration: none;
     font-size: 0.9rem;
+    border: none;
+    width: 100%;
+
 }
 
 .cart .edit-btn {
     color: coral;
-    ;
     text-decoration: none;
     font-size: 0.95rem;
+    background-color: #fff;
+    border: none;
+    /* width: 100%; */
 }
 
 .cart .product-info p {
