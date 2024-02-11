@@ -12,7 +12,7 @@ CREATE TABLE IF NOT EXISTS `orders` (
     `order_cost` decimal(6, 2) NOT NULL,
     `order_status` varchar(100) NOT NULL DEFAULT 'on_hold',
     `user_id` int(11) NOT NULL,
-    `user_phone` int(11) NOT NULL,
+    `user_phone` int(20) NOT NULL,
     `user_city` varchar(255) NOT NULL,
     `user_street` varchar(255) NOT NULL,
     `user_house` varchar(255) NOT NULL,
@@ -27,6 +27,8 @@ CREATE TABLE IF NOT EXISTS `order_items` (
     `product_id` int(11) NOT NULL,
     `product_name` varchar(255) NOT NULL,
     `product_image` varchar(255) NOT NULL,
+    `product_price` DECIMAL(6, 2) NOT NULL,
+    `product_quantity` INT NOT NULL,
     `user_id` int(11) NOT NULL,
     `order_date` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (`item_id`)

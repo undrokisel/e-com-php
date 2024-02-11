@@ -75,7 +75,7 @@ if (isset($_POST['add_to_cart'])) {
     calcTotalCart();
 
 } else {
-    header('location: index.php');
+    // header('location: index.php');
 }
 
 

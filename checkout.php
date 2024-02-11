@@ -1,3 +1,21 @@
+<?php
+
+include('server/place_order.php');
+
+session_start();
+
+// если переход был из непустой корзины
+if (!empty($_SESSION['cart'] && isset($_POST['checkout']))) {
+
+
+} else {
+    header("location:index.php");
+}
+
+
+
+?>
+
 <!doctype html>
 <html lang="ru">
 
@@ -75,7 +93,8 @@
             <hr class="mx-auto" />
         </div>
         <div class="mx-auto container">
-            <form action="place_order.php" method="POST" id="checkout-form">
+
+            <form action="server/place_order.php" method="POST" id="checkout-form">
 
                 <div class="form-group checkout-small-element">
                     <label>Как звать? Какой позывной?</label>
@@ -91,7 +110,7 @@
 
                 <div class="form-group checkout-small-element">
                     <label>Телефон</label>
-                    <input type="tel" class="form-control" id="checkout-phone" name="phone" placeholder="цифры"
+                    <input type="tel" pattern="[0-9]*" class="form-control" id="checkout-phone" name="phone" placeholder="цифры"
                         required />
                 </div>
 
@@ -121,6 +140,9 @@
 
 
                 <div class="form-group checkout-btn-container">
+                    <p>Итого к оплате:
+                        <?php echo $_SESSION['total'] ?> деревянных
+                    </p>
                     <input type="submit" name="place_order" class="btn" id="checkout-btn" value="Сохранить" />
                 </div>
 
@@ -132,7 +154,6 @@
 
 
     <footer class="mt-5 py-5">
-
         <div class="row container mx-auto pt-5">
 
             <div class="footer-one col-lg-3 col-md-6col-sm-12">

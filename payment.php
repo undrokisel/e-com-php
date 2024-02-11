@@ -2,55 +2,8 @@
 
 
 session_start();
-include('server/connection.php');
 
-if (isset($_POST['register'])) {
-    $name = $_POST['name'];
-    $email = $_POST['email'];
-    $pass = $_POST['password'];
-    $passConfirm = $_POST['confirmPassword'];
 
-    if ($pass !== $passConfirm) {
-        header('location: register.php?error=пароли не совпадают');
-    } else if (strlen($pass) < 6) {
-        header('location: register.php?error=длина пароля должна быть не меньше 6 символов');
-        
-        // если нет ошибок при заполнении формы
-    } else {
-        // проверка есть ли уже в базе юзер с такой почтой
-        $stmt1 = $conn->prepare("SELECT count(*) FROM users WHERE user_email=?");
-        $stmt1->bind_param('s', $email);
-        $stmt1->execute();
-        $stmt1->bind_result($num_rows);
-        $stmt1->store_result();
-        $stmt1->fetch();
-
-        // если пользователь с такой почтой уже был зарегистрирован ранее
-        if ($num_rows != 0) {
-            header('location: register.php?error=пользователь с такой почтой уже был зарегистрирован ранее');
-
-            // если пользователь новый
-        } else {
-            // сохраняем нового юзера в базу
-            $stmt = $conn->prepare("INSERT INTO users (user_name,user_email,user_password) VALUES (?,?,?)");
-            $stmt->bind_param('sss', $name, $email, md5($pass));
-
-            // в случае успешного сохранения в базе
-            if ($stmt->execute()) {
-                $_SESSION['user_email'] = $email;
-                $_SESSION['user_name'] = $name;
-                $_SESSION['logged_in'] = true;
-            } else {
-                header('location: register.php?error=ошибка при создании аккаунта нового пользователя');
-            }
-        }
-
-    }
-    // если пользователь уже зарегистрирован отправим его на страницу профиля
-} else if (isset($_SESSION['logged_in'])) {
-    header('location:account.php');
-    exit;
-}
 
 
 ?>
@@ -70,7 +23,7 @@ if (isset($_POST['register'])) {
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 
-    <title>МАГАЗИН</title>
+    <title>Профиль</title>
 </head>
 
 <body>
@@ -125,62 +78,26 @@ if (isset($_POST['register'])) {
         </div>
     </nav>
 
-
-    <!-- register -->
+    <!-- payment -->
     <section class="my-5 py-5">
         <div class="container text-center mt-3 pt-5">
-            <h2 class="form-weight-bold">Привет, дорогой новорег!</h2>
+            <h2 class="form-weight-bold">Оплата:</h2>
             <hr class="mx-auto" />
         </div>
-        <div class="mx-auto container">
-            <form action="register.php" id="register-form" method="POST">
-
-                <h4 class="text-danger text-big">
-                    <?php if (isset($_GET['error'])) {
-                        echo $_GET["error"];
-                    } ?>
-                </h4>
-
-
-                <div class="form-group">
-                    <label>Как звать? Какой позывной?</label>
-                    <input type="text" class="form-control" id="register-name" name="name" placeholder="Вася"
-                        required />
-                </div>
-
-                <div class="form-group">
-                    <label>Почта</label>
-                    <input type="text" class="form-control" id="register-email" name="email" placeholder="email"
-                        required />
-                </div>
-
-                <div class="form-group">
-                    <label>Пасс</label>
-                    <input type="password" class="form-control" id="register-password" name="password"
-                        placeholder="пароль" required />
-                </div>
-
-                <div class="form-group">
-                    <label>Повтори пасс плиз</label>
-                    <input type="password" class="form-control" id="register-confirm-password" name="confirmPassword"
-                        placeholder="пароль" required />
-                </div>
-
-                <div class="form-group">
-                    <input type="submit" name="register" class="btn" id="register-btn" value="Зарегаться" />
-                </div>
-
-                <div class="form-group">
-                    <a id="register-url" class="btn" href="/login.php">Уже есть акк? Тогда заходи уже, не стесняйся</a>
-                </div>
-
-            </form>
+        <div class="mx-auto container text-center">
+            <p>
+                <?php echo $_GET['order_status'] ?>
+            </p>
+            <p>К оплате всего:
+                <?php echo $_SESSION['total'] ?>
+            </p>
+            <input class="btn btn-primary" type="submit" value="Оплатить сейчас">
         </div>
     </section>
 
 
-    <footer class="mt-5 py-5">
 
+    <footer class="mt-5 py-5">
         <div class="row container mx-auto pt-5">
 
             <div class="footer-one col-lg-3 col-md-6col-sm-12">
@@ -227,10 +144,6 @@ if (isset($_POST['register'])) {
                 </div>
             </div>
         </div>
-
-
-
-
 
         <div class="copyright mt-5">
             <div class="row container mx-auto">
