@@ -1,3 +1,53 @@
+<?php
+include('server/connection.php');
+session_start();
+
+// если еще не залогинен, то сразу отправим на страницу логина
+if (!isset($_SESSION['logged_in'])) {
+    header('location: login.php');
+    exit();
+}
+
+
+if (isset($_POST['changePass'])) {
+
+    $pass = $_POST['password'];
+    $confirm_pass = $_POST['confirmPassword'];
+    $email = $_SESSION['user_email'];
+
+    // если введенные пароли не совпадают
+    if ($pass !== $confirm_pass) {
+        header('location: account.php?error=пароли не совпадают');
+    } else if (strlen($pass) < 6) {
+        header('location: account.php?error=длина пароля должна быть не меньше 6 символов');
+        // 
+    } else {
+        // если пароли совпадают, то сохраним пароль в таблицу
+        $newHashedPass = md5($pass);
+        $smtp = $conn->prepare("UPDATE users SET user_password=? WHERE user_email=?");
+        $smtp->bind_param('ss', $newHashedPass, $email);
+        if ($smtp->execute()) {
+            header('location: account.php?message=Пароль успешно изменен');
+        } else {
+            header('location: account.php?error=не удалось изменить пароль');
+        }
+    }
+}
+
+
+if (isset($_GET['logout'])) {
+    if (isset($_SESSION['logged_in'])) {
+        unset($_SESSION['logged_in']);
+        unset($_SESSION['user_name']);
+        unset($_SESSION['user_email']);
+        header('location: login.php');
+        exit();
+    }
+}
+
+?>
+
+
 <!doctype html>
 <html lang="ru">
 
@@ -71,21 +121,55 @@
     <!-- account -->
     <section class="account my-5 py-5">
         <div class="row container mx-auto">
+
+            <h4 class="text-success text-center">
+                <?php if (isset($_GET['register_success'])) {
+                    echo $_GET['register_success'];
+                } ?>
+            </h4>
+            <h4 class="text-success text-center">
+                <?php if (isset($_GET['login_success'])) {
+                    echo $_GET['login_success'];
+                } ?>
+            </h4>
+
             <div class="text-center mt-3 pt-5 col-lg-5 col-md-12 col-sm-12">
                 <h3 class="font-weight-bold">Досье</h3>
                 <hr class="mx-auto">
                 <div class="account-info">
-                    <p>Имя: <span>Вася</span></p>
-                    <p>Почта: <span>Вася@фывфы</span></p>
-                    <p><a id="order-btn" href="">Корзинка</a></p>
-                    <p><a id="logout-btn" href="">Разлогинка</a></p>
+                    <p>Имя: <span>
+                            <?php if (isset($_SESSION['user_name'])) {
+                                echo $_SESSION['user_name'];
+                            } ?>
+                        </span></p>
+                    <p>Почта: <span>
+                            <?php if (isset($_SESSION['user_email'])) {
+                                echo $_SESSION['user_email'];
+                            } ?>
+                        </span></p>
+                    <p><a id="order-btn" href="#orders">МОИ ЗАКАЗЫ</a></p>
+
+                    <p><a id="logout-btn" href="account.php?logout=1">Разлогиниться</a></p>
+
                 </div>
             </div>
 
             <div class="col-lg-6 col-md-12 col-sm-12">
-                <form action="" id="account-form">
+
+                <form action="account.php" method="POST" id="account-form">
                     <h3>Сменить пасс</h3>
                     <hr class="mx-auto">
+                    <h4 class="text-danger text-center">
+                        <?php if (isset($_GET['error'])) {
+                            echo $_GET['error'];
+                        } ?>
+                    </h4>
+                    <h4 class="text-success text-center">
+                        <?php if (isset($_GET['message'])) {
+                            echo $_GET['message'];
+                        } ?>
+                    </h4>
+
 
                     <div class="form-group">
                         <label>Пасс</label>
@@ -100,12 +184,99 @@
                     </div>
 
                     <div class="form-group">
-                        <input type="submit" class="btn btn-submit" value="Сохранить" id="change-pass-btn">
+                        <input type="submit" name="changePass" class="btn btn-submit" value="Сохранить"
+                            id="change-pass-btn">
                     </div>
 
                 </form>
             </div>
         </div>
+    </section>
+
+
+    <!-- orders -->
+    <section id="orders" class="orders container my-5 py-5">
+        <div class="container mt-5">
+            <h2 class="font-weight-bold text-center">Ваши заказы</h2>
+            <hr class="mx-auto">
+        </div>
+        <table class="mt-5pt-5">
+            <tr>
+                <th>Товар</th>
+                <th>Количество</th>
+                <th>Стоимость</th>
+            </tr>
+
+            <?php foreach ($_SESSION['cart'] as $key => $value) { ?>
+
+                <tr>
+                    <td>
+                        <div class="product-info">
+                            <img src="assets/images/<?php echo $value['product_image'] ?>" alt="" class="src" />
+                            <div class="">
+                                <p>
+                                    <?php echo $value['product_name'] ?>
+                                </p>
+                                <small><span>деревянных:</span>
+                                    <?php echo $value['product_price'] ?>
+                                </small>
+                                <br>
+
+                                <form action="cart.php" method="POST">
+                                    <input type="hidden" name="product_id" value="<?php echo $value['product_id'] ?>">
+                                    <input class="remove-btn" type="submit" name="remove_product" value="УДАЛИТЬ">
+                                </form>
+                            </div>
+                        </div>
+                    </td>
+
+                    <td>
+                        <form action="cart.php" method="POST" class="d-flex">
+                            <input type="hidden" name="product_id" value=<?php echo $value['product_id'] ?>>
+                            <input type="number" min="1" name="product_quantity"
+                                value="<?php echo $value['product_quantity'] ?>" />
+                            <input type="submit" name="edit_quantity" value="Изменить" class="edit-btn">
+                        </form>
+                    </td>
+
+                    <td>
+                        <span>деревянных: </span>
+                        <span class="product-price">
+                            <?php echo ($value['product_price'] * $value['product_quantity']) ?>
+                        </span>
+                    </td>
+
+                </tr>
+            <?php } ?>
+
+
+        </table>
+
+        <div class="cart__total">
+            <table>
+                <!-- <tr>
+                    <td>Стоимость</td>
+                    <td>
+                        <?php echo $_SESSION['total']; ?> деревянных
+                    </td>
+                </tr> -->
+                <tr>
+                    <td>Всего</td>
+                    <td>
+                        <?php echo $_SESSION['total']; ?> деревянных
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="checkout-container">
+            <form action="checkout.php" method="POST">
+
+                <input type="submit" name="checkout" value="К настройкам доставки" class="btn checkout-btn" />
+            </form>
+
+        </div>
+
     </section>
 
 

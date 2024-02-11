@@ -16,7 +16,7 @@ if (isset($_POST['place_order'])) {
     $flat = $_POST['flat'];
     $order_cost = $_SESSION['total'];
     $order_status = "on_hold";
-    $user_id = 1;
+    $user_id = $_SESSION['user_id'];
     $order_date = date('Y-m-d H-m-s');
 
     $stmt = $conn->prepare("INSERT INTO orders (

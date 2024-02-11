@@ -4,6 +4,12 @@
 session_start();
 include('server/connection.php');
 
+
+if (isset($_SESSION['logged_in'])) {
+    header('location: account.php');
+    exit();
+}
+
 if (isset($_POST['register'])) {
     $name = $_POST['name'];
     $email = $_POST['email'];
@@ -14,7 +20,7 @@ if (isset($_POST['register'])) {
         header('location: register.php?error=пароли не совпадают');
     } else if (strlen($pass) < 6) {
         header('location: register.php?error=длина пароля должна быть не меньше 6 символов');
-        
+
         // если нет ошибок при заполнении формы
     } else {
         // проверка есть ли уже в базе юзер с такой почтой
@@ -37,18 +43,20 @@ if (isset($_POST['register'])) {
 
             // в случае успешного сохранения в базе
             if ($stmt->execute()) {
+                $user_id = $stmt->insert_id;
+                $_SESSION['user_id'] = $user_id;
                 $_SESSION['user_email'] = $email;
                 $_SESSION['user_name'] = $name;
                 $_SESSION['logged_in'] = true;
+                header('location: account.php?register_success=Вы успешно зарегистрированы');
             } else {
                 header('location: register.php?error=ошибка при создании аккаунта нового пользователя');
             }
         }
 
     }
-    // если пользователь уже зарегистрирован отправим его на страницу профиля
 } else if (isset($_SESSION['logged_in'])) {
-    header('location:account.php');
+    header('location:login.php');
     exit;
 }
 
@@ -150,7 +158,7 @@ if (isset($_POST['register'])) {
 
                 <div class="form-group">
                     <label>Почта</label>
-                    <input type="text" class="form-control" id="register-email" name="email" placeholder="email"
+                    <input type="email" class="form-control" id="register-email" name="email" placeholder="email"
                         required />
                 </div>
 
