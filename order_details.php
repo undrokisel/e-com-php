@@ -1,20 +1,27 @@
 <?php
-
-include('server/place_order.php');
+include('assets/constants/constants.php');
+include('server/connection.php');
 
 session_start();
 
-// если переход был из непустой корзины
-if (!empty($_SESSION['cart'] && isset($_POST['checkout']))) {
+if (isset($_POST["order_details_btn"]) && isset($_POST['order_id'])) {
+    $order_id = $_POST['order_id'];
+    $order_status = $_POST['order_status'];
 
-
+    $stmt = $conn->prepare("SELECT * FROM order_items WHERE order_id=?");
+    $stmt->bind_param("i", $order_id);
+    $stmt->execute();
+    $order_details = $stmt->get_result();
 } else {
-    header("location:index.php");
+    header('location: account.php');
+    exit();
 }
 
 
 
+
 ?>
+
 
 <!doctype html>
 <html lang="ru">
@@ -31,7 +38,7 @@ if (!empty($_SESSION['cart'] && isset($_POST['checkout']))) {
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 
-    <title>ДОСТАВКА</title>
+    <title>ДЕТАЛИ ЗАКАЗА</title>
 </head>
 
 <body>
@@ -86,74 +93,66 @@ if (!empty($_SESSION['cart'] && isset($_POST['checkout']))) {
         </div>
     </nav>
 
-    <!-- checkout -->
-    <section class="my-5 py-5">
-        <div class="container text-center mt-3 pt-5">
-            <h2 class="form-weight-bold">Адрес доставки:</h2>
-            <hr class="mx-auto" />
-        </div>
-        <div class="mx-auto container">
+    <!-- order details -->
+    <section id="orders" class="orders container my-5 py-5">
+        <div class="container mt-5 mx-auto">
+            <h2 class="font-weight-bold text-center">Детали заказа</h2>
+            <hr class="mx-auto">
+        
+        <table class="mt-5 pt-5 mx-auto text-center">
+            <tr>
+                <th>Товар</th>
+                <th>Цена</th>
+                <th>Количество</th>
+            </tr>
 
-            <form action="server/place_order.php" method="POST" id="checkout-form">
+            <?php while ($row = $order_details->fetch_assoc()) { ?>
 
-                <div class="form-group checkout-small-element">
-                    <label>Как звать? Какой позывной?</label>
-                    <input type="text" class="form-control" id="checkout-name" name="name" placeholder="Вася"
-                        required />
-                </div>
+                <tr>
+                    <td>
+                        <div class="">
+                            <img src="assets/images/<?php echo $row['product_image'] ?>" alt="" class="src" />
+                            <div class="">
+                                <p>
+                                    <?php echo $row['product_name'] ?>
+                                </p>
+                            </div>
+                        </div>
+                    </td>
 
-                <div class="form-group checkout-small-element">
-                    <label>Почта</label>
-                    <input type="text" class="form-control" id="checkout-email" name="email" placeholder="email"
-                        required />
-                </div>
+                    <td>
+                        <span class="">
+                            <?php echo $row['product_price'] ?>
+                        </span>
+                    </td>
+                    <td>
+                        <span class="">
+                            <?php echo $row['product_quantity'] ?>
+                        </span>
+                    </td>
+                    <td>
+                        <span class="">
+                            <?php echo $row['order_status'] ?>
+                        </span>
+                    </td>
 
-                <div class="form-group checkout-small-element">
-                    <label>Телефон</label>
-                    <input type="tel" pattern="[0-9]*" class="form-control" id="checkout-phone" name="phone" placeholder="цифры"
-                        required />
-                </div>
+                </tr>
+            <?php } ?>
+        </table>
 
-                <div class="form-group checkout-small-element">
-                    <label>Город</label>
-                    <input type="text" class="form-control" id="checkout-city" name="city" placeholder="Москве"
-                        required />
-                </div>
-
-                <div class="form-group checkout-small-element">
-                    <label>Улица</label>
-                    <input type="text" class="form-control" id="checkout-street" name="street" placeholder="Ленина"
-                        required />
-                </div>
-
-                <div class="form-group checkout-small-element">
-                    <label>Дом</label>
-                    <input type="text" class="form-control" id="checkout-house" name="house" placeholder="1" required />
-                </div>
-
-                <div class="form-group checkout-small-element">
-                    <label>Квартира</label>
-                    <input type="number" min="1" class="form-control" id="checkout-flat" name="flat" placeholder="1"
-                        required />
-                </div>
-
-
-
-                <div class="form-group checkout-btn-container">
-                    <p>Итого к оплате:
-                        <?php echo $_SESSION['total'] ?> деревянных
-                    </p>
-                    <input type="submit" name="place_order" class="btn" id="checkout-btn" value="Сохранить" />
-                </div>
-
-
+        <?php if ($order_status === $NOT_PAID) { ?>
+            <form action="" class='d-flex justify-content-end'>
+                <input type="submit" class="btn btn-warning" value="Оплатить сейчас">
             </form>
+        <?php } ?>
         </div>
+
+
     </section>
 
 
-
     <footer class="mt-5 py-5">
+
         <div class="row container mx-auto pt-5">
 
             <div class="footer-one col-lg-3 col-md-6col-sm-12">

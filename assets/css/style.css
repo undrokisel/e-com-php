@@ -462,11 +462,11 @@ hr {
     padding: 5px 20px;
     color: #fff;
     background-color: coral;
-    text-align: left;
+    /* text-align: left; */
 }
 
 .orders th:nth-child(2) {
-    text-align: right;
+    /* text-align: right; */
 }
 
 .orders td {
@@ -477,6 +477,11 @@ hr {
     width: 80px;
     height: 80px;
     margin-right: 10px;
+}
+
+.orders .order-details-btn {
+    color: #fff;
+    background-color: coral;
 }
 
 /* checkout */

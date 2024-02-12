@@ -2,6 +2,7 @@
 
 session_start();
 include('connection.php');
+include('assets/constants/constants.php');
 
 // обработка пост запроса на сохранение адреса доставки
 if (isset($_POST['place_order'])) {
@@ -15,7 +16,7 @@ if (isset($_POST['place_order'])) {
     $house = $_POST['house'];
     $flat = $_POST['flat'];
     $order_cost = $_SESSION['total'];
-    $order_status = "on_hold";
+    $order_status = $NOT_PAID;
     $user_id = $_SESSION['user_id'];
     $order_date = date('Y-m-d H-m-s');
 

@@ -9,6 +9,16 @@ if (!isset($_SESSION['logged_in'])) {
 }
 
 
+if (isset($_GET['logout'])) {
+    if (isset($_SESSION['logged_in'])) {
+        unset($_SESSION['logged_in']);
+        unset($_SESSION['user_name']);
+        unset($_SESSION['user_email']);
+        header('location: login.php');
+        exit();
+    }
+}
+
 if (isset($_POST['changePass'])) {
 
     $pass = $_POST['password'];
@@ -34,16 +44,25 @@ if (isset($_POST['changePass'])) {
     }
 }
 
+if (isset($_SESSION['logged_in'])) {
+    $user_id = $_SESSION['user_id'];
 
-if (isset($_GET['logout'])) {
-    if (isset($_SESSION['logged_in'])) {
-        unset($_SESSION['logged_in']);
-        unset($_SESSION['user_name']);
-        unset($_SESSION['user_email']);
-        header('location: login.php');
-        exit();
-    }
+    $stmt = $conn->prepare("SELECT * FROM orders WHERE user_id=?");
+    $stmt->bind_param('i', $user_id);
+    $stmt->execute();
+    $orders = $stmt->get_result();
+
+
+    $status_enam = [
+        "on_hold" => 'в обработке',
+        "not_paid" => 'не оплачен',
+        "delivered" => 'доставлен',
+    ];
+
+
+
 }
+
 
 ?>
 
@@ -56,14 +75,14 @@ if (isset($_GET['logout'])) {
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <link rel="stylesheet" href="./assets/css/style.css">
+    <link rel="stylesheet" href="./assets/css/style.css?v=<?php echo md5_file('./assets/css/style.css') ?>">
 
 
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 
-    <title>Профиль</title>
+    <title>ПРОФИЛЬ</title>
 </head>
 
 <body>
@@ -196,86 +215,57 @@ if (isset($_GET['logout'])) {
 
     <!-- orders -->
     <section id="orders" class="orders container my-5 py-5">
-        <div class="container mt-5">
+        <div class="container mt-5 mx-auto">
             <h2 class="font-weight-bold text-center">Ваши заказы</h2>
             <hr class="mx-auto">
-        </div>
-        <table class="mt-5pt-5">
-            <tr>
-                <th>Товар</th>
-                <th>Количество</th>
-                <th>Стоимость</th>
-            </tr>
 
-            <?php foreach ($_SESSION['cart'] as $key => $value) { ?>
-
+            <table class="mt-5 pt-5 mx-auto text-center">
                 <tr>
-                    <td>
-                        <div class="product-info">
-                            <img src="assets/images/<?php echo $value['product_image'] ?>" alt="" class="src" />
-                            <div class="">
-                                <p>
-                                    <?php echo $value['product_name'] ?>
-                                </p>
-                                <small><span>деревянных:</span>
-                                    <?php echo $value['product_price'] ?>
-                                </small>
-                                <br>
-
-                                <form action="cart.php" method="POST">
-                                    <input type="hidden" name="product_id" value="<?php echo $value['product_id'] ?>">
-                                    <input class="remove-btn" type="submit" name="remove_product" value="УДАЛИТЬ">
-                                </form>
-                            </div>
-                        </div>
-                    </td>
-
-                    <td>
-                        <form action="cart.php" method="POST" class="d-flex">
-                            <input type="hidden" name="product_id" value=<?php echo $value['product_id'] ?>>
-                            <input type="number" min="1" name="product_quantity"
-                                value="<?php echo $value['product_quantity'] ?>" />
-                            <input type="submit" name="edit_quantity" value="Изменить" class="edit-btn">
-                        </form>
-                    </td>
-
-                    <td>
-                        <span>деревянных: </span>
-                        <span class="product-price">
-                            <?php echo ($value['product_price'] * $value['product_quantity']) ?>
-                        </span>
-                    </td>
-
+                    <th>Номер заказа</th>
+                    <th>Стоимость заказа</th>
+                    <th>Статус</th>
+                    <th>Дата</th>
+                    <th>Детали заказа</th>
                 </tr>
-            <?php } ?>
 
+                <?php while ($row = $orders->fetch_assoc()) { ?>
 
-        </table>
+                    <tr>
+                        <td>
+                            <span>
+                                <?php echo $row['order_id'] ?>
+                            </span>
+                        </td>
 
-        <div class="cart__total">
-            <table>
-                <!-- <tr>
-                    <td>Стоимость</td>
-                    <td>
-                        <?php echo $_SESSION['total']; ?> деревянных
-                    </td>
-                </tr> -->
-                <tr>
-                    <td>Всего</td>
-                    <td>
-                        <?php echo $_SESSION['total']; ?> деревянных
-                    </td>
-                </tr>
+                        <td>
+                            <span class="">
+                                <?php echo $row['order_cost'] ?>
+                            </span>
+                        </td>
+                        <td>
+                            <span class="">
+                                <?php echo $status_enam[$row['order_status']] ?>
+                            </span>
+                        </td>
+                        <td>
+                            <span class="">
+                                <?php echo $row['order_date'] ?>
+                            </span>
+                        </td>
+                        <td>
+                            <form action="order_details.php" method="POST">
+                                <input type="hidden" name="order_status" value="<?php echo $row['order_status'] ?>">
+                                <input type="hidden" name="order_id" value="<?php echo $row['order_id'] ?>">
+                                <input class="btn order-details-btn" name="order_details_btn" type="submit"
+                                    value="Подробнее">
+                            </form>
+                        </td>
+
+                    </tr>
+                <?php } ?>
             </table>
         </div>
 
-        <div class="checkout-container">
-            <form action="checkout.php" method="POST">
-
-                <input type="submit" name="checkout" value="К настройкам доставки" class="btn checkout-btn" />
-            </form>
-
-        </div>
 
     </section>
 
