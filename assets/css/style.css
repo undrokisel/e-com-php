@@ -12,16 +12,17 @@ a {
     margin-left: 60%;
 }
 
-Button {
-    background-color: #2b2727 !important;
+.btn {
+    background-color: coral !important;
     color: #fff !important;
     outline: none;
-    border: none;
+    border: none !important;
     padding: 10px 20px;
 }
 
-Button:hover {
-    background-color: coral !important;
+.btn:hover {
+    background-color: #2b2727 !important;
+   
 }
 
 @media only screen and (max-width: 900px) {
@@ -123,19 +124,50 @@ h6 {
     margin-left: 5px;
 }
 
+
+/* stars */
+.star {
+    padding: 10px 0;
+}
+
+.star svg {
+    font-size: 0.9rem;
+    color: goldenrod;
+}
+
+
+/* #hero */
+
 #hero {
     background-image: url('../images/hero2.jpg');
     width: 100%;
-    height: 100vh;
+    height: 60vh;
     background-size: cover;
-    background-position-x: -200px;
-    background-position-y: 70px;
+    background-position-x: center;
+    background-position-y: 80px;
     background-repeat: no-repeat;
+    background-attachment: fixed;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: flex-start;
 
+}
+
+#hero h1 {
+    color: #fff
+}
+
+#hero h4 {
+    color: #fff
+}
+
+#hero .btn {
+    background-color: coral;
+}
+
+#hero .btn:hover {
+    background-color: #1d1d1d;
 }
 
 @media screen and (max-width: 1100px) {
@@ -233,10 +265,11 @@ h6 {
     justify-content: center;
     flex-direction: column;
     align-items: flex-end;
-    text-align: start;
+    text-align: end;
 }
 
 /* featured products */
+/* product */
 
 .product {
     cursor: pointer;
@@ -251,22 +284,88 @@ h6 {
     opacity: 0.7;
 }
 
+
+.product .buy-btn {
+    background-color: coral;
+    transform: translateY(30px);
+    opacity: 0;
+    transition: 0.3s all;
+    color: #fff;
+}
+
+.shop-buy-btn {
+    background-color: coral;
+    opacity: 1;
+    color: #fff;
+    text-decoration: none;
+}
+
+.product:hover .buy-btn {
+    transform: translateY(0px);
+    opacity: 1;
+}
+
+
+
 /* footer  */
 
 footer {
-    background-color: #000;
-    opacity: 0.6;
-    color: #fff !important;
+    background-color: #222;
+    /* opacity: 0.6;
+    color: #fff !important; */
 }
 
-footer a {
-    color: #fff !important;
+
+footer h5 {
+    color: #D8D8D8;
+    font-weight: 700;
+    font-size: 1.2rem;
+}
+
+
+footer li {
+    padding-bottom: 4px;
+}
+
+
+footer li a {
+    font-size: 0.8rem;
+    color: #999;
+    text-decoration: none;
+}
+
+footer li a:hover {
+    color: #D8D8D8;
+}
+
+footer .copyright a {
+    color: #000;
+    height: 40px;
+    width: 40px;
+    background-color: #fff;
+    display: inline-block;
+    text-align: center;
+    line-height: 2.2rem;
+    border-radius: 50%;
+    transition: 0.3s ease;
+    margin: 0 5px;
 }
 
 footer .copyright a:hover {
     color: #999;
     font-size: 0.8rem;
+    background-color: coral;
 }
+
+footer .copyright img {
+    width: 30%;
+}
+
+footer p {
+    color: #999;
+    font-size: 0.8rem;
+}
+
 
 /* pagination */
 .page-link {
@@ -287,8 +386,9 @@ footer .copyright a:hover {
     max-width: 50px;
 }
 
-/* .single-product input { */
-input[type="number"] {
+
+input[type="number"],
+.single-product input {
     width: 50px;
     height: 40px;
     padding-left: 10px;
@@ -296,15 +396,15 @@ input[type="number"] {
     margin-right: 10px;
 }
 
-/* .single-product input:focus { */
-input[type="number"]:focus {
+input[type="number"]:focus,
+.single-product input:focus {
     outline: none;
 }
 
 .single-product .buy-btn {
     background-color: coral;
     opacity: 1;
-    transition: 0.4s ease;
+    transition: 0.4s all;
 }
 
 .single-product .buy-btn:hover {
@@ -334,6 +434,12 @@ input[type="number"]:focus {
     padding: 10px 20px;
 }
 
+.cart td img {
+    width: 80px;
+    height: 80px;
+    margin-right: 10px;
+}
+
 .cart img {
     width: 80px;
     height: 80px;
@@ -359,7 +465,6 @@ input[type="number"]:focus {
     font-size: 0.95rem;
     background-color: #fff;
     border: none;
-    /* width: 100%; */
 }
 
 .cart .product-info p {
@@ -395,13 +500,16 @@ th:last-child {
     justify-content: flex-end;
 }
 
+
+/* hr */
 hr {
-    max-width: 40px !important;
-    min-height: 4px !important;
-    color: coral !important;
+    width: 30px;
+    height: 3px !important;
+    opacity: 1 !important;
+    background-color: coral !important;
 }
 
-/* login */
+/* login  register*/
 #login-form,
 #register-form {
     width: 50%;
@@ -453,6 +561,12 @@ hr {
 
 
 /* orders */
+.orders table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+
 .orders .product-info {
     display: flex;
     flex-wrap: wrap;
@@ -507,7 +621,35 @@ hr {
     background-color: coral;
 }
 
+
+
+
+
+
 /* contact */
 #contact span {
     color: coral;
 }
+
+/* shop */
+
+.product img {
+    width: 100%;
+    max-width: 250px;
+    /* height: auto; */
+    height: 200px;
+    box-sizing: border-box;
+    object-fit: cover;
+}
+
+.pagination a {
+    color: coral;
+}
+
+.pagination li:hover a {
+    color: #fff;
+    background-color: coral;
+}
+
+/* categories */
+
