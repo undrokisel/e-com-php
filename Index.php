@@ -1,3 +1,32 @@
+<?php
+
+include('server/connection.php');
+
+
+// получаем первые четыре категории
+$stmt = $conn->prepare("SELECT DISTINCT product_category FROM products LIMIT 4");
+$stmt->execute();
+$result = $stmt->get_result();
+$categories = mysqli_fetch_all($result, MYSQLI_ASSOC);
+$categories = array_column($categories, 'product_category');
+
+//на каждую из категорий получаем по 4 товара и сохраняем. 
+$selectedProducts = array();
+
+foreach ($categories as $category) {
+    $stmt = $conn->prepare("SELECT * FROM products WHERE product_category = ? LIMIT 4");
+    $stmt->bind_param("s", $category);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $products = mysqli_fetch_all($result, MYSQLI_ASSOC);
+    $productsByCategory[$category] = $products;
+}
+
+
+
+?>
+
+
 <?php include('layouts/header.php') ?>
 
 
@@ -8,7 +37,10 @@
         <h4>НОВИНКИ</h4>
         <h1>У нас <span>лучшие цены</span></h1>
         <p>MAGAZON предлагает лучшие мерчи по незашкварным ценам </p>
-        <button class="btn">Налетай-покупай</button>
+
+        <a href="shop.php">
+            <button class="btn">Налетай-покупай</button>
+        </a>
     </div>
 </section>
 
@@ -112,252 +144,59 @@
     </div>
 </section>
 
-<!-- clothes -->
-<section id="features" class="my-5">
-    <div class="text-center container mt-5 py-5">
-        <h3>Шмотки:</h3>
-        <hr class="mx-auto">
-        <p>Зацени шмотье:</p>
+<!-- товары по категориям -->
 
-        <div class="row mx-auto container-fluid ">
+<?php foreach ($productsByCategory as $key => $products) { ?>
 
-            <!-- clothes 1 -->
-            <div class="product text-center col-lg-3 col-md-4 col-sm-12">
-                <img class="img-fluid mb-3" src="assets/images/featured1.png" />
-                <div class="star">
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                </div>
-                <div>
-                    <h5 class="p-name">Апль вижин китайский</h5>
-                    <h4 class="p-price">199,8 руб</h4>
-                    <button class="btn buy-btn">Давай-покупай</button>
-                </div>
+    <section id="features" class="my-5">
+        <div class="text-center container mt-5 py-5">
+            <h3>
+                <?php echo $products[0]['product_category'] ?>
+            </h3>
+            <hr class="mx-auto">
+            <p>Зацени
+                <?php echo $products[0]['product_category'] ?>:
+            </p>
+
+            <div class="row mx-auto container-fluid ">
+
+                <?php foreach ($products as $key => $product) { ?>
+
+
+                    <!-- товар  -->
+                    <div class="product text-center col-lg-3 col-md-4 col-sm-12">
+                        <img class="img-fluid mb-3" src="assets/images/<?php echo $product['product_image'] ?>" />
+                        <div class="star">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <div>
+                            <h5 class="p-name">
+                                <?php echo $product['product_name'] ?>
+                            </h5>
+                            <h4 class="p-price">
+                                <?php echo $product['product_price'] ?> руб
+                            </h4>
+                            <a href="<?php echo "single_product.php?product_id=" . $product['product_id']; ?>">
+                                <button class="btn buy-btn">Давай-покупай</button>
+                            </a>
+                        </div>
+                    </div>
+
+                <?php } ?>
+
+
+
+
+
             </div>
-
-            <!-- clothes 2 -->
-            <div class="product text-center col-lg-3 col-md-4 col-sm-12">
-                <img class="img-fluid mb-3" src="assets/images/featured1.png" />
-                <div class="star">
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                </div>
-                <div>
-                    <h5 class="p-name">Апль вижин китайский</h5>
-                    <h4 class="p-price">199,8 руб</h4>
-                    <button class="btn buy-btn">Давай-покупай</button>
-                </div>
-            </div>
-
-            <!-- clothes 3 -->
-            <div class="product text-center col-lg-3 col-md-4 col-sm-12">
-                <img class="img-fluid mb-3" src="assets/images/featured1.png" />
-                <div class="star">
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                </div>
-                <div>
-                    <h5 class="p-name">Апль вижин китайский</h5>
-                    <h4 class="p-price">199,8 руб</h4>
-                    <button class="btn buy-btn">Давай-покупай</button>
-                </div>
-            </div>
-
-            <!-- clothes 4 -->
-            <div class="product text-center col-lg-3 col-md-4 col-sm-12">
-                <img class="img-fluid mb-3" src="assets/images/featured1.png" />
-                <div class="star">
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                </div>
-                <div>
-                    <h5 class="p-name">Апль вижин китайский</h5>
-                    <h4 class="p-price">199,8 руб</h4>
-                    <button class="btn buy-btn">Давай-покупай</button>
-                </div>
-            </div>
-
-
         </div>
-    </div>
-</section>
+    </section>
 
-
-<!-- watches -->
-<section id="watches" class="my-5">
-    <div class="text-center container mt-5 py-5">
-        <h3>вотчи:</h3>
-        <hr class="mx-auto">
-        <p>Зацени вотчи:</p>
-
-        <div class="row mx-auto container-fluid ">
-
-            <!-- clothes 1 -->
-            <div class="product text-center col-lg-3 col-md-4 col-sm-12">
-                <img class="img-fluid mb-3" src="assets/images/featured1.png" />
-                <div class="star">
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                </div>
-                <div>
-                    <h5 class="p-name">Апль вижин китайский</h5>
-                    <h4 class="p-price">199,8 руб</h4>
-                    <button class="btn buy-btn">Давай-покупай</button>
-                </div>
-            </div>
-
-            <!-- clothes 2 -->
-            <div class="product text-center col-lg-3 col-md-4 col-sm-12">
-                <img class="img-fluid mb-3" src="assets/images/featured1.png" />
-                <div class="star">
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                </div>
-                <div>
-                    <h5 class="p-name">Апль вижин китайский</h5>
-                    <h4 class="p-price">199,8 руб</h4>
-                    <button class="btn buy-btn">Давай-покупай</button>
-                </div>
-            </div>
-
-            <!-- clothes 3 -->
-            <div class="product text-center col-lg-3 col-md-4 col-sm-12">
-                <img class="img-fluid mb-3" src="assets/images/featured1.png" />
-                <div class="star">
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                </div>
-                <div>
-                    <h5 class="p-name">Апль вижин китайский</h5>
-                    <h4 class="p-price">199,8 руб</h4>
-                    <button class="btn buy-btn">Давай-покупай</button>
-                </div>
-            </div>
-
-            <!-- clothes 4 -->
-            <div class="product text-center col-lg-3 col-md-4 col-sm-12">
-                <img class="img-fluid mb-3" src="assets/images/featured1.png" />
-                <div class="star">
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                </div>
-                <div>
-                    <h5 class="p-name">Апль вижин китайский</h5>
-                    <h4 class="p-price">199,8 руб</h4>
-                    <button class="btn buy-btn">Давай-покупай</button>
-                </div>
-            </div>
-
-
-        </div>
-    </div>
-</section>
-
-<!-- shoes -->
-<section id="shoes" class="my-5">
-    <div class="text-center container mt-5 py-5">
-        <h3>тяги:</h3>
-        <hr class="mx-auto">
-        <p>Зацени тяги:</p>
-
-        <div class="row mx-auto container-fluid ">
-
-            <!-- clothes 1 -->
-            <div class="product text-center col-lg-3 col-md-4 col-sm-12">
-                <img class="img-fluid mb-3" src="assets/images/featured1.png" />
-                <div class="star">
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                </div>
-                <div>
-                    <h5 class="p-name">Апль вижин китайский</h5>
-                    <h4 class="p-price">199,8 руб</h4>
-                    <button class="btn buy-btn">Давай-покупай</button>
-                </div>
-            </div>
-
-            <!-- clothes 2 -->
-            <div class="product text-center col-lg-3 col-md-4 col-sm-12">
-                <img class="img-fluid mb-3" src="assets/images/featured1.png" />
-                <div class="star">
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                </div>
-                <div>
-                    <h5 class="p-name">Апль вижин китайский</h5>
-                    <h4 class="p-price">199,8 руб</h4>
-                    <button class="btn buy-btn">Давай-покупай</button>
-                </div>
-            </div>
-
-            <!-- clothes 3 -->
-            <div class="product text-center col-lg-3 col-md-4 col-sm-12">
-                <img class="img-fluid mb-3" src="assets/images/featured1.png" />
-                <div class="star">
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                </div>
-                <div>
-                    <h5 class="p-name">Апль вижин китайский</h5>
-                    <h4 class="p-price">199,8 руб</h4>
-                    <button class="btn buy-btn">Давай-покупай</button>
-                </div>
-            </div>
-
-            <!-- clothes 4 -->
-            <div class="product text-center col-lg-3 col-md-4 col-sm-12">
-                <img class="img-fluid mb-3" src="assets/images/featured1.png" />
-                <div class="star">
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                </div>
-                <div>
-                    <h5 class="p-name">Апль вижин китайский</h5>
-                    <h4 class="p-price">199,8 руб</h4>
-                    <button class="btn buy-btn">Давай-покупай</button>
-                </div>
-            </div>
-
-
-        </div>
-    </div>
-</section>
+<?php } ?>
 
 
 <?php include('layouts/footer.php') ?>

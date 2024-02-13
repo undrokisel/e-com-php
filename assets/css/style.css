@@ -322,6 +322,10 @@ footer h5 {
     font-size: 1.2rem;
 }
 
+footer .sublogo-text {
+    font-size: 0.9rem;
+    font-weight: 700;
+}
 
 footer li {
     padding-bottom: 4px;
@@ -338,24 +342,48 @@ footer li a:hover {
     color: #D8D8D8;
 }
 
-footer .copyright a {
-    color: #000;
-    height: 40px;
-    width: 40px;
-    background-color: #fff;
+
+/* socials */
+footer .copyright a
+{
+    background-color: #ccadad;
     display: inline-block;
-    text-align: center;
     line-height: 2.2rem;
     border-radius: 50%;
     transition: 0.3s ease;
     margin: 0 5px;
 }
 
+/* шрифтовый */
+footer .copyright a.tg {
+    width: 40px;
+    height: 40px;
+    fill: rgb(50, 156, 206);
+    padding: 0 8px;
+    text-align: center;
+}
+/* чистый svg */
+footer .copyright a.youtube {
+    width: 40px;
+    height: 40px;
+    fill: red;
+    padding: 0 6px;
+    text-align: center;
+}
+footer .copyright a.vk {
+    width: 40px;
+    height: 40px;
+    fill: rgb(78, 78, 226);
+    padding: 0 8px;
+    text-align: center;
+}
+
+
 footer .copyright a:hover {
-    color: #999;
-    font-size: 0.8rem;
     background-color: coral;
 }
+
+
 
 footer .copyright img {
     width: 30%;
@@ -372,6 +400,8 @@ footer p {
     color: #000 !important;
 }
 
+/* .single-product */
+
 .small-img-group {
     display: flex;
     justify-content: space-between;
@@ -386,6 +416,11 @@ footer p {
     max-width: 50px;
 }
 
+
+.img-fluid {
+    max-width: 100%;
+    height: auto;
+}
 
 input[type="number"],
 .single-product input {
@@ -455,8 +490,10 @@ input[type="number"]:focus,
     text-decoration: none;
     font-size: 0.9rem;
     border: none;
-    width: 100%;
-
+    /* width: 100%; */
+    padding: 5px 20px;
+    border-radius: 5px;
+    margin-top: 5px;
 }
 
 .cart .edit-btn {
@@ -579,9 +616,7 @@ hr {
     /* text-align: left; */
 }
 
-.orders th:nth-child(2) {
-    /* text-align: right; */
-}
+
 
 .orders td {
     padding: 10px 20px;

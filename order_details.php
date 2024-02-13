@@ -90,6 +90,7 @@ function calcTotalOrderPrice($order_details)
 
         <?php if ($order_status === $NOT_PAID) { ?>
             <form action="payment.php" method="POST" class='d-flex justify-content-end'>
+                <input type="hidden" name="order_id" value=<?php echo $order_id; ?>>
                 <input type="hidden" name="total_order_price" value=<?php echo $total_order_price; ?>>
                 <input type="hidden" name="order_status" value=<?php echo $order_status; ?>>
                 <input type="submit" name="order_pay_btn" class="btn btn-warning mx-auto" value="Оплатить сейчас">

@@ -28,13 +28,16 @@ if (isset($_POST['order_pay_btn'])) {
             <p>К оплате всего:
                 <?php echo $_SESSION['total']; ?>
             </p>
-            <input class="btn-primary btn" type="submit" value="Оплатить сейчас">
+            <!-- <input class="btn-primary btn" type="submit" value="Оплатить сейчас"> -->
+            <button onClick="alert('Внесите оплату на карту 1234 1234 1234 1234')" class="btn-primary btn">
+                Оплатить сейчас</button>
 
         <?php } else if (isset($_POST['order_status']) && $_POST['order_status'] == $NOT_PAID) { ?>
                 <p>Всего к оплате:
                 <?php echo $_POST['total_order_price'] ?> руб.
                 </p>
-                <input class="btn-primary btn" type="submit" value="Оплатить сейчас">
+                <button onClick="alert('Внесите оплату на карту 1234 1234 1234 1234')" class="btn-primary btn">
+                    Оплатить сейчас</button>
 
 
         <?php } else { ?>

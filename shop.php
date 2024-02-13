@@ -1,6 +1,18 @@
 <?php
 include('server/connection.php');
 
+
+// получаем все категории (для отражения в левом aside)
+$stmtCategories = $conn->prepare("SELECT DISTINCT product_category from products");
+$stmtCategories->execute();
+$result = $stmtCategories->get_result();
+$categories = mysqli_fetch_all($result, MYSQLI_ASSOC);
+$categories = array_column($categories, 'product_category');
+
+
+
+
+// если нажали на поиск
 if (isset($_POST['search'])) {
     $category = $_POST['category'];
     $price = $_POST['price'];
@@ -10,11 +22,41 @@ if (isset($_POST['search'])) {
     $stmt->execute();
     $products = $stmt->get_result();
 
-    // если поиск не использован, то возрващаем все продукты
+    // если поиск не использован, то возрващаем все продукты 
 } else {
-    $stmt = $conn->prepare("SELECT * FROM products");
+    // определяем номер страницы из урла, если он не установлен - дефолт 1
+    if (isset($_GET['page']) && $_GET['page'] != "") {
+        $page = $_GET["page"];
+    } else {
+        $page = 1;
+    }
+
+    // возвращаем количество товаров в магазине
+    $stmtPages = $conn->prepare("SELECT COUNT(*) as total_records from products");
+    $stmtPages->execute();
+    $stmtPages->bind_result($total_records);
+    $stmtPages->store_result();
+    $stmtPages->fetch();
+
+    
+    // количество товаров на странице
+    $total_records_per_page = 1;
+    // сдвиг для запроса в базу под каждую страницу
+    $offset = ($page - 1) * $total_records_per_page;
+    $prev_page = $page - 1;
+    $next_page = $page + 1;
+    // $adjacents = "2";
+    
+    //количество страниц 
+    $total_num_of_pages = ceil($total_records / $total_records_per_page);
+
+    // получаем товары, соответствующие странице
+    // $offset - сдвиг от первой записи 
+    $stmt = $conn->prepare("SELECT * FROM products LIMIT $offset, $total_records_per_page");
     $stmt->execute();
     $products = $stmt->get_result();
+
+
 }
 
 ?>
@@ -26,7 +68,8 @@ if (isset($_POST['search'])) {
 
 <!-- поиск search -->
 <div class="d-flex">
-    <section id="search" class="my-5 pb-5 ms-2">
+
+    <aside id="search" class="my-5 pb-5 ms-2">
         <div class="container mt-5 py-5">
             <p>Поиск по товарам: </p>
             <hr>
@@ -37,20 +80,19 @@ if (isset($_POST['search'])) {
 
                         <p>Категории</p>
 
-                        <div class="form-check">
-                            <input type="radio" value="gadgets" name="category" id="category_one"
-                                class="form-check-input" checked>
-                            <label class="form-check-label" for="flexRadioDefault">
-                                Гаджеты
-                            </label>
-                        </div>
-                        <div class="form-check">
-                            <input type="radio" value="toys" name="category" id="category_two" class="form-check-input"
-                                checked>
-                            <label class="form-check-label" for="flexRadioDefault2">
-                                Игрушки
-                            </label>
-                        </div>
+                        <?php foreach ($categories as $key => $category) { ?>
+
+
+                            <div class="form-check">
+                                <input type="radio" value="<?php echo $category ?>" name="category" id="category_one"
+                                    class="form-check-input">
+                                <label class="form-check-label" for="flexRadioDefault">
+                                    <?php echo $category ?>
+                                </label>
+                            </div>
+
+
+                        <?php } ?>
 
                     </div>
                 </div>
@@ -58,7 +100,7 @@ if (isset($_POST['search'])) {
                 <div class="row mx-auto container mt-5">
                     <div class="col-lg-12 col-md-12 col-sm-12">
                         <p>Цена</p>
-                        <input type="range" name="price" value="1000" class="form-range w-150" min="1" max="10000"
+                        <input type="range" name="price" value="10000" class="form-range w-150" min="1" max="10000"
                             id="customRange2">
                         <div class="w-50 d-flex justify-content-between gap-5">
                             <div class="">1</div>
@@ -77,7 +119,7 @@ if (isset($_POST['search'])) {
 
 
 
-    </section>
+    </aside>
 
     <!-- shop -->
     <section id="features" class="my-5 pb-5">
@@ -115,13 +157,50 @@ if (isset($_POST['search'])) {
 
                 <?php } ?>
 
-                <nav aria-label="Навигация">
+
+
+                <nav aria-label="pagination">
                     <ul class="pagination mt-5">
-                        <li class="page-item"><a href="#" class="page-link">Предыдущая</a></li>
-                        <li class="page-item"><a href="#" class="page-link">1</a></li>
-                        <li class="page-item"><a href="#" class="page-link">2</a></li>
-                        <li class="page-item"><a href="#" class="page-link">3</a></li>
-                        <li class="page-item"><a href="#" class="page-link">Следующая</a></li>
+
+                        <!-- предыдущая страница -->
+                        <li class="page-item <?php if ($page <= 1) {
+                            echo 'disabled';
+                        } ?>">
+                            <a href="<?php if ($page <= 1) {
+                                echo '#';
+                            } else {
+                                echo "?page=" . ($page - 1);
+                            } ?>" class="page-link">
+                                Предыдущая
+                            </a>
+                        </li>
+
+                        <li class="page-item"><a href="?page=1" class="page-link">1</a></li>
+                        <li class="page-item"><a href="?page=2" class="page-link">2</a></li>
+
+                        <?php if ($page >= 3) { ?>
+                            <li class="page-item"><a href="#" class="page-link">...</a></li>
+                            <li class="page-item">
+                                <a href="<?php echo "?page=" . $page; ?>" class="page-link">
+                                    <?php echo $page;
+                                    ?>
+                                </a>
+                            </li>
+
+                        <?php } ?>
+
+                        <!-- следующая страница -->
+                        <li class="page-item <?php if ($page >= $total_num_of_pages) {
+                            echo 'disabled';
+                        } ?>">
+                            <a href="<?php if ($page >= $total_num_of_pages) {
+                                echo '#';
+                            } else {
+                                echo "?page=" . ($page + 1);
+                            } ?>" class="page-link">
+                                Следующая
+                            </a>
+                        </li>
                     </ul>
                 </nav>
 

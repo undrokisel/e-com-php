@@ -51,7 +51,7 @@ if (!empty($_SESSION['cart'])) {
             </div>
 
             <div class="form-group checkout-small-element">
-                <label>Телефон</label>
+                <label>Телефон (только цифры)</label>
                 <input type="tel" pattern="[0-9]*" class="form-control" id="checkout-phone" name="phone"
                     placeholder="цифры" required />
             </div>

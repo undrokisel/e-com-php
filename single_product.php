@@ -26,18 +26,18 @@ if (isset($_GET['product_id'])) {
                     class="img-fluid w-100 pb-1" />
                 <div class="small-img-group">
                     <div class="small-img-col">
-                        <img src="/assets/images/<?php echo $row['product_image'] ?>" width:"100%" alt="" class="small-img">
+                        <img src="/assets/images/<?php echo $row['product_image'] ?>" width:"100%"  height="100%" alt="" class="small-img">
                     </div>
                     <div class="small-img-col">
-                        <img src="/assets/images/<?php echo $row['product_image2'] ?>" width:"100%" alt=""
+                        <img src="/assets/images/<?php echo $row['product_image2'] ?>" width:"100%" height="100%" alt=""
                             class="small-img">
                     </div>
                     <div class="small-img-col">
-                        <img src="/assets/images/<?php echo $row['product_image3'] ?>" width:"100%" alt=""
+                        <img src="/assets/images/<?php echo $row['product_image3'] ?>" width:"100%" height="100%" alt=""
                             class="small-img">
                     </div>
                     <div class="small-img-col">
-                        <img src="/assets/images/<?php echo $row['product_image4'] ?>" width:"100%" alt=""
+                        <img src="/assets/images/<?php echo $row['product_image4'] ?>" width:"100%" height="100%" alt=""
                             class="small-img">
                     </div>
                 </div>
