@@ -1,20 +1,4 @@
-<?php
-
-include('server/place_order.php');
-session_start();
-
-
-// если переход был из непустой корзины
-if (!empty($_SESSION['cart'])) {
-
-} else {
-    header("location: index.php");
-    exit;
-}
-
-
-
-?>
+<?php include ('handlers/checkout.php') ?>
 
 <?php include('layouts/header.php') ?>
 
@@ -22,11 +6,13 @@ if (!empty($_SESSION['cart'])) {
 <!-- checkout -->
 <section class="my-5 py-5">
     <div class="container text-center mt-3 pt-5">
-        <h2 class="form-weight-bold">Адрес доставки:</h2>
+        <h2 class="form-weight-bold">Данные для доставки:</h2>
         <hr class="mx-auto" />
     </div>
     <div class="mx-auto container">
-        <form action="server/place_order.php" method="POST" id="checkout-form">
+        <form 
+        class="mx-auto"
+        action="server/place_order.php" method="POST" id="checkout-form">
 
             <p class="text-center text-danger">
                 <?php if (isset($_GET['message'])) {
@@ -41,29 +27,29 @@ if (!empty($_SESSION['cart'])) {
 
 
             <div class="form-group checkout-small-element">
-                <label>Как звать? Какой позывной?</label>
-                <input type="text" class="form-control" id="checkout-name" name="name" placeholder="Вася" required />
+                <label>Ваше имя</label>
+                <input type="text" class="form-control" id="checkout-name" name="name" placeholder="Имя" required />
             </div>
 
             <div class="form-group checkout-small-element">
                 <label>Почта</label>
-                <input type="text" class="form-control" id="checkout-email" name="email" placeholder="email" required />
+                <input type="text" class="form-control" id="checkout-email" name="email" placeholder="Почта" required />
             </div>
 
             <div class="form-group checkout-small-element">
-                <label>Телефон (только цифры)</label>
+                <label>Телефон</label>
                 <input type="tel" pattern="[0-9]*" class="form-control" id="checkout-phone" name="phone"
-                    placeholder="цифры" required />
+                    placeholder="8999999919" required />
             </div>
 
             <div class="form-group checkout-small-element">
                 <label>Город</label>
-                <input type="text" class="form-control" id="checkout-city" name="city" placeholder="Москве" required />
+                <input type="text" class="form-control" id="checkout-city" name="city" placeholder="Город" required />
             </div>
 
             <div class="form-group checkout-small-element">
                 <label>Улица</label>
-                <input type="text" class="form-control" id="checkout-street" name="street" placeholder="Ленина"
+                <input type="text" class="form-control" id="checkout-street" name="street" placeholder="Улица"
                     required />
             </div>
 

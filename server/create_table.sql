@@ -18,20 +18,8 @@ CREATE TABLE IF NOT EXISTS `orders` (
     `user_house` varchar(255) NOT NULL,
     `user_flat` int(11) NOT NULL,
     `order_date` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    PRIMARY KEY (`order_id`)
-) ENGINE = InnoDB DEFAULT CHARSET = utf8 AUTO_INCREMENT = 1;
-;
-CREATE TABLE IF NOT EXISTS `order_items` (
-    `item_id` int(11) NOT NULL AUTO_INCREMENT,
-    `order_id` int(11) NOT NULL,
-    `product_id` int(11) NOT NULL,
-    `product_name` varchar(255) NOT NULL,
-    `product_image` varchar(255) NOT NULL,
-    `product_price` DECIMAL(6, 2) NOT NULL,
-    `product_quantity` INT NOT NULL,
-    `user_id` int(11) NOT NULL,
-    `order_date` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    PRIMARY KEY (`item_id`)
+    PRIMARY KEY (`order_id`),
+    FOREIGN KEY (`user_id`) REFERENCES `users`(`user_id`)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8 AUTO_INCREMENT = 1;
 ;
 CREATE TABLE IF NOT EXISTS `products` (
@@ -48,3 +36,20 @@ CREATE TABLE IF NOT EXISTS `products` (
     `product_color` varchar(100) NOT NULL,
     PRIMARY KEY (`product_id`)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8 AUTO_INCREMENT = 1;
+;
+CREATE TABLE IF NOT EXISTS `order_items` (
+    `item_id` int(11) NOT NULL AUTO_INCREMENT,
+    `order_id` int(11) NOT NULL,
+    `product_id` int(11) NOT NULL,
+    `product_name` varchar(255) NOT NULL,
+    `product_image` varchar(255) NOT NULL,
+    `product_price` DECIMAL(6, 2) NOT NULL,
+    `product_quantity` INT NOT NULL,
+    `user_id` int(11) NOT NULL,
+    `order_date` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (`item_id`),
+    FOREIGN KEY (`order_id`) REFERENCES `orders`(`order_id`),
+    FOREIGN KEY (`product_id`) REFERENCES `products`(`product_id`),
+    CONSTRAINT `fk_user_id` FOREIGN KEY (`user_id`) REFERENCES `users`(`user_id`)
+) ENGINE = InnoDB DEFAULT CHARSET = utf8 AUTO_INCREMENT = 1;
+;

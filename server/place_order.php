@@ -2,14 +2,16 @@
 
 session_start();
 include('connection.php');
-// include('../assets/constants/constants.php');
+
+
 
 // если юзер не залогигнен
 if (!isset($_SESSION['logged_in'])) {
-    header('location: ../account.php?message=Сначала необходимо войти/зарегистрироваться');
+    header('location: ../login.php?message=Сначала необходимо войти/зарегистрироваться');
     // exit;
     // если юзер залогигнен
 } else {
+
 
 
     // обработка пост запроса на сохранение адреса доставки
@@ -56,7 +58,9 @@ if (!isset($_SESSION['logged_in'])) {
 
 
 
+
         if (!$stmt_status) {
+            
             header('location: ../index.php');
             exit;
         }
@@ -104,7 +108,10 @@ if (!isset($_SESSION['logged_in'])) {
 
 
         // 5. удалить все из корзины
-        // unset($_SESSION['cart']);
+        unset($_SESSION['cart']);
+        unset($_SESSION['quantity']);
+
+        $_SESSION['order_id'] = $order_id;
 
         // 6. сообщить юзеру все ли в порядке или есть проблемки
         header('location: ../payment.php?order_status=Ваш заказ принят');
